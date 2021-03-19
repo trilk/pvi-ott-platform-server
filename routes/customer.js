@@ -1,6 +1,9 @@
 const router = require("express").Router();
 const Customers = require("../model/Customers");
 
+// define response
+const { __success, __network } = require("../define_response");
+
 //ROUTER POST
 router.post("/register", async (req, res) => {
   const customer = new Customers({
@@ -9,9 +12,9 @@ router.post("/register", async (req, res) => {
   });
   try {
     const saveCustomer = await customer.save();
-    res.send(saveCustomer);
+    return res.send(__success());
   } catch (error) {
-    res.status(400).send(error);
+    return res.status(400).send(__network());
   }
 });
 

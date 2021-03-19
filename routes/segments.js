@@ -4,16 +4,37 @@ const _ = require("lodash");
 // verify token
 const verify = require("../routes/verifyToken");
 
-const SegmentDAO = require("../components/DAO/SegmentDAO");
+const { createSegment, listSegment } = require("../components/DAO/SegmentDAO");
+
+// define response
+const { __success, __network, __validField } = require("../define_response");
+
+//ROUTER POST
 router.post("/create", verify, async (req, res) => {
   try {
-    const result = await SegmentDAO.createSegment(req.body, req.account.data.id);
-    if (!_.isEmpty(result)) {
-      res.send(result);
+    if (_.isEmpty(req.body.channelId) || _.isEmpty(req.body.segmentName)) {
+      return res.send(__validField());
+    } else {
+      const segment = await createSegment(req.body, req.account.data.id);
+      return res.send(segment);
     }
   } catch (error) {
-    res.status(400).send(error);
+    res.status(400).send(__network());
   }
 });
 
+//ROUTER GET
+router.get("/list", verify, async (req, res) => {
+  try {
+    const { page, limit } = req.query;
+    if (_.isEmpty(limit) || _.isNil(limit)) {
+      return res.send(__missingParam());
+    } else {
+      const list = await listSegment(page, limit);
+      return res.send(list);
+    }
+  } catch (error) {
+    return res.status(400).send(__network());
+  }
+});
 module.exports = router;

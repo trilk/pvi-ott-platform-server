@@ -15,6 +15,12 @@ exports.Token = class Token {
     this.setRole = function (role) {
       self.role = role;
     };
+    this.getName = function () {
+      return self.name;
+    };
+    this.setName = function (name) {
+      self.name = name;
+    };
     this.getCustomerCode = function () {
       return self.customerCode;
     };

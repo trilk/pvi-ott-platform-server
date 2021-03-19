@@ -1,12 +1,12 @@
 const amqp = require("amqplib");
-exports.createMessageQueue = async function (messages, queueName) {
+exports.createMessageQueue = async function (messages) {
   try {
-    const connection = await amqp.connect(queueName);
+    const connection = await amqp.connect(process.env.RABBIT_CONNECTION);
     const channel = await connection.createChannel();
-    const result = await channel.assertQueue(queueName);
-    channel.sendToQueue(queueName, Buffer.from(JSON.stringify(messages)));
+    const result = await channel.assertQueue(process.env.QUEUE_NAME);
+    channel.sendToQueue(process.env.QUEUE_NAME, Buffer.from(JSON.stringify(messages)));
   } catch (error) {
-    console.log(error);
+    console.log("create queue error", error);
   }
 };
 
@@ -21,6 +21,6 @@ exports.receiveQueue = async function () {
       channel.ack(result);
     });
   } catch (error) {
-    console.log(error);
+    console.log("receive queue error", error);
   }
 };
