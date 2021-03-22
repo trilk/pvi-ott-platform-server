@@ -31,4 +31,5 @@ router.get("/list", verify, async (req, res) => {
     return res.status(400).send(__network());
   }
 });
+
 module.exports = router;

@@ -1,11 +1,14 @@
 const router = require("express").Router();
+
+const viberBot = require("./viberbot");
+
 //lodash
 const _ = require("lodash");
 // verify token
 const verify = require("../routes/verifyToken");
 
 // queue
-const { createMessageQueue, receiveQueue } = require("../publisher");
+const { createMessageQueue, receiveQueue } = require("../queue");
 
 // Message DAO
 const { createMessage, updateMessage, listMessage } = require("../components/DAO/MessageDAO");
@@ -22,8 +25,11 @@ router.post("/send", verify, async (req, res) => {
     if (_.isEmpty(result)) {
       return res.send(__emptyData());
     } else {
-      await createMessageQueue(result);
-      await receiveQueue();
+      result.ChatIdList.forEach(async (userProfile) => {
+        // viberBot.sendMessage(userProfile);
+        await createMessageQueue(userProfile, result.ContentOTT);
+        await receiveQueue();
+      });
       return res.send(__success());
     }
   } catch (error) {
@@ -45,10 +51,10 @@ router.post("/create", verify, async (req, res) => {
 });
 router.put("/update", verify, async (req, res) => {
   try {
-    if (_.isEmpty(req.body.id)) {
+    if (_.isEmpty(req.body.segmentId)) {
       return res.send(__validField());
     } else {
-      const message = await updateMessage(req.body, req.body.id);
+      const message = await updateMessage(req.body);
       return res.send(message);
     }
   } catch (error) {

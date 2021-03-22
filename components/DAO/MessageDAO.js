@@ -29,7 +29,7 @@ exports.createMessage = async function (data, id) {
         ChannelId: segments.ChannelId,
         CreateBy: id,
       });
-      await Segments.updateOne({ _id: id }, { $set: result });
+      await result.save();
       return __success();
     }
   } catch (error) {
@@ -37,26 +37,27 @@ exports.createMessage = async function (data, id) {
   }
 };
 
-exports.updateMessage = async function (data, id) {
+exports.updateMessage = async function (data) {
   try {
     const message = parseMessage(data);
     const segments = await Segments.findOne({ _id: message.getSegmentId() });
     if (_.isEmpty(segments)) {
       return __emptyData();
     } else {
-      const result = new Messages({
+      const result = new Object({
         ContentOTT: message.getContentOTT(),
         ContentSMS: message.getContentSMS(),
         TemplateId: message.getTemplateId(),
         ChatIdList: segments.ChatIdList,
         ChannelId: segments.ChannelId,
-        CreateBy: id,
       });
-      await result.save();
+      await Messages.updateOne({ _id: data.id }, { $set: result });
       return __success();
     }
   } catch (error) {
-    return __exception();
+    let result = __exception();
+    result.error = error;
+    return result;
   }
 };
 

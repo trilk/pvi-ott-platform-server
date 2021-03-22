@@ -7,15 +7,18 @@ exports.viberSubscribe = async function (data) {
   try {
     const checkExist = await Contacts.findOne({ ChatId: data.id });
     if (!_.isEmpty(checkExist) || !_.isNil(checkExist)) {
-      await Contacts.updateOne({ ChatId: data.id }, { $set: { ChatStatus: true } });
+      await Contacts.updateOne(
+        { ChatId: data.id },
+        { $set: { ChatStatus: true, ChatName: data.name, ViberAccount: data } }
+      );
       return __exist();
     } else {
       const channel = await Channels.findOne({ ChannelType: "Viber" });
-      console.log(channel);
       const contact = new Contacts({
         ChannelId: channel._id,
         ChatId: data.id,
         ChatName: data.name,
+        ViberAccount: data,
         ChatStatus: true,
       });
       await contact.save();
@@ -58,6 +61,38 @@ exports.listSubcriber = async function (page, limit) {
     listContacts.Contacts = list;
     listContacts.total = totalRecord.length;
     return listContacts;
+  } catch (error) {
+    return __exception();
+  }
+};
+
+exports.zaloSubscribe = async function (data) {
+  try {
+    const checkExist = await Contacts.findOne({ ChatId: data.id });
+    if (!_.isEmpty(checkExist) || !_.isNil(checkExist)) {
+      await Contacts.updateOne({ ChatId: data.id }, { $set: { ChatStatus: true } });
+      return __exist();
+    } else {
+      const channel = await Channels.findOne({ ChannelType: "Zalo" });
+      const contact = new Contacts({
+        ChannelId: channel._id,
+        ChatId: data.follower.id,
+        ChatName: data.name,
+        ZaloAccount: data,
+        ChatStatus: true,
+      });
+      await contact.save();
+      return __success();
+    }
+  } catch (error) {
+    return __exception();
+  }
+};
+
+exports.zaloUnSubscribe = async function (id) {
+  try {
+    await Contacts.updateOne({ ChatId: id }, { $set: { ChatStatus: false } });
+    return __success();
   } catch (error) {
     return __exception();
   }

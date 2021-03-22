@@ -4,7 +4,7 @@ const _ = require("lodash");
 // verify token
 const verify = require("../routes/verifyToken");
 
-const { createSegment, listSegment } = require("../components/DAO/SegmentDAO");
+const { createSegment, listSegment, updateSegment } = require("../components/DAO/SegmentDAO");
 
 // define response
 const { __success, __network, __validField } = require("../define_response");
@@ -16,6 +16,19 @@ router.post("/create", verify, async (req, res) => {
       return res.send(__validField());
     } else {
       const segment = await createSegment(req.body, req.account.data.id);
+      return res.send(segment);
+    }
+  } catch (error) {
+    res.status(400).send(__network());
+  }
+});
+
+router.put("/update", verify, async (req, res) => {
+  try {
+    if (_.isEmpty(req.body.channelId) || _.isEmpty(req.body.id)) {
+      return res.send(__validField());
+    } else {
+      const segment = await updateSegment(req.body);
       return res.send(segment);
     }
   } catch (error) {

@@ -19,17 +19,13 @@ const bot = new ViberBot({
 
 // Perfect! Now here's the key part:
 bot.on(BotEvents.MESSAGE_RECEIVED, (message, response) => {
-  sendMessage(response.userProfile, "Hi");
+  botSendMessage(response.userProfile, "Hi");
 });
 bot.onSubscribe((response) => viberSubscribe(response.userProfile));
 bot.onUnsubscribe((userId) => viberUnSubscribe(userId));
 bot.getBotProfile().then((response) => {
   console.log("bot name", response);
 });
-
-const sendMessage = (userProfile, message) => {
-  bot.sendMessage(userProfile, [new TextMessage(message)]);
-};
 
 const httpsOptions = {
   key: fs.readFileSync("./key.pem"),
@@ -43,4 +39,9 @@ http.createServer(httpsOptions, bot.middleware()).listen(6000, () => {
     })
     .catch((err) => console.log(err));
 });
+
+// export function
+module.exports.botSendMessage = async (userProfile, message) => {
+  return await bot.sendMessage(userProfile, message);
+};
 module.exports = bot;

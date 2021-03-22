@@ -29,6 +29,12 @@ const contactSchema = new mongoose.Schema({
   ChatStatus: {
     type: Boolean,
   },
+  ViberAccount: {
+    type: Object,
+  },
+  ZaloAccount: {
+    type: Object,
+  },
   CreateDate: {
     type: Date,
     default: Date.now(),

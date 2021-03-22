@@ -14,7 +14,7 @@ exports.createSegment = async function (data, id) {
       let arrayContacts = [];
       const contactList = await Contacts.where("ChannelId", data.channelId);
       contactList.forEach((element) => {
-        arrayContacts.push({ ChatId: element.ChatId, ChatName: element.ChatName });
+        arrayContacts.push(element.ViberAccount);
       });
       const segment = new Segments({
         SegmentName: data.segmentName,
@@ -28,6 +28,23 @@ exports.createSegment = async function (data, id) {
       result.data = saveSegment;
       return result;
     }
+  } catch (error) {
+    return __exception();
+  }
+};
+
+exports.updateSegment = async function (data) {
+  try {
+    const contactList = await Contacts.where("ChannelId", data.channelId);
+    const arrayContacts = contactList.map((contact) => {
+      return contact.ViberAccount;
+    });
+    let segment = new Object();
+    segment.SegmentName = data.segmentName;
+    segment.SegmentDesc = data.segmentDesc;
+    segment.ChatIdList = arrayContacts;
+    await Segments.updateOne({ _id: data.id }, { $set: segment });
+    return __success();
   } catch (error) {
     return __exception();
   }

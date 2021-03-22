@@ -3,6 +3,7 @@ const router = require("express").Router();
 router.post("/webhook", async (req, res) => {
   try {
     console.log("req",req.body);
+    res.status(200).send("zalo webhook bot connect success");
   } catch (error) {
     console.log("webhook error", error);
   }
