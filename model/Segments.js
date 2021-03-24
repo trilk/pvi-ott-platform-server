@@ -21,6 +21,12 @@ const segmentSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  ChannelType: {
+    type: String,
+  },
+  ChannelToken: {
+    type: String,
+  },
   FilterQuery: {
     type: Array,
   },

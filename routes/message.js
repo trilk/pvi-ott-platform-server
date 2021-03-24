@@ -1,7 +1,6 @@
 const router = require("express").Router();
-
-const viberBot = require("./viberbot");
-
+//use uuid
+const { v4: uuidv4 } = require("uuid");
 //lodash
 const _ = require("lodash");
 // verify token
@@ -25,9 +24,11 @@ router.post("/send", verify, async (req, res) => {
     if (_.isEmpty(result)) {
       return res.send(__emptyData());
     } else {
+      
+      const messageByTime = uuidv4();
       result.ChatIdList.forEach(async (userProfile) => {
         // viberBot.sendMessage(userProfile);
-        await createMessageQueue(userProfile, result.ContentOTT);
+        await createMessageQueue(userProfile, result, messageByTime);
         await receiveQueue();
       });
       return res.send(__success());

@@ -45,6 +45,12 @@ const messageSchema = new mongoose.Schema({
     type: String,
     //required: true,
   },
+  ChannelType: {
+    type: String,
+  },
+  ChannelToken: {
+    type: String,
+  },
   CreateDate: {
     type: Date,
     default: Date.now(),

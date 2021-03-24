@@ -10,10 +10,12 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 // connect mongo db
+let dbConnection = false;
 const mongoose = require("mongoose");
-mongoose.connect(process.env.DB_CONNECTION_DEV, { useNewUrlParser: true, useUnifiedTopology: true }, () =>
-  console.log("connect to db!")
-);
+mongoose.connect(process.env.DB_CONNECTION_DEV, { useNewUrlParser: true, useUnifiedTopology: true }, () => {
+  dbConnection = true;
+  console.log("connect to db!");
+});
 
 // import routes
 const authRoute = require("./routes/auth");

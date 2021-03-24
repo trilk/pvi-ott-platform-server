@@ -24,7 +24,7 @@ bot.on(BotEvents.MESSAGE_RECEIVED, (message, response) => {
 bot.onSubscribe((response) => viberSubscribe(response.userProfile));
 bot.onUnsubscribe((userId) => viberUnSubscribe(userId));
 bot.getBotProfile().then((response) => {
-  console.log("bot name", response);
+  console.log("bot name", response.name);
 });
 
 const httpsOptions = {
@@ -37,7 +37,7 @@ http.createServer(httpsOptions, bot.middleware()).listen(6000, () => {
     .then(() => {
       console.log("viber bot set webhook success");
     })
-    .catch((err) => console.log(err));
+    .catch((err) => console.log("bot didn't connected",err));
 });
 
 // export function

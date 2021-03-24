@@ -69,3 +69,17 @@ exports.listChannel = async function (page, limit) {
     return __exception();
   }
 };
+
+//get Token by channel
+exports.getTokenByChannel = async function (channelType) {
+  try {
+    if (_.isEmpty(channelType) || _.isNil(channelType)) {
+      return __validField();
+    } else {
+      const detail = await Channels.findOne({ ChannelType: channelType });
+      return detail.ChannelToken;
+    }
+  } catch (error) {
+    return __exception();
+  }
+};

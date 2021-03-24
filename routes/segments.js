@@ -25,7 +25,7 @@ router.post("/create", verify, async (req, res) => {
 
 router.put("/update", verify, async (req, res) => {
   try {
-    if (_.isEmpty(req.body.channelId) || _.isEmpty(req.body.id)) {
+    if (_.isEmpty(req.body.id)) {
       return res.send(__validField());
     } else {
       const segment = await updateSegment(req.body);

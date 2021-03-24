@@ -27,6 +27,8 @@ exports.createMessage = async function (data, id) {
         TemplateId: message.getTemplateId(),
         ChatIdList: segments.ChatIdList,
         ChannelId: segments.ChannelId,
+        ChannelType: segments.ChannelType,
+        ChannelToken: segments.ChannelToken,
         CreateBy: id,
       });
       await result.save();
@@ -41,6 +43,7 @@ exports.updateMessage = async function (data) {
   try {
     const message = parseMessage(data);
     const segments = await Segments.findOne({ _id: message.getSegmentId() });
+    console.log(segments);
     if (_.isEmpty(segments)) {
       return __emptyData();
     } else {
@@ -50,6 +53,8 @@ exports.updateMessage = async function (data) {
         TemplateId: message.getTemplateId(),
         ChatIdList: segments.ChatIdList,
         ChannelId: segments.ChannelId,
+        ChannelType: segments.ChannelType,
+        ChannelToken: segments.ChannelToken,
       });
       await Messages.updateOne({ _id: data.id }, { $set: result });
       return __success();

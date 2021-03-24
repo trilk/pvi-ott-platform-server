@@ -1,6 +1,7 @@
 const Segments = require("../../model/Segments");
 const Accounts = require("../../model/Accounts");
 const Contacts = require("../../model/Contacts");
+const Channels = require("../../model/Channels");
 //lodash
 const _ = require("lodash");
 
@@ -11,16 +12,26 @@ exports.createSegment = async function (data, id) {
     if (_.isEmpty(data.channelId) || _.isNil(data.channelId)) {
       return __validField();
     } else {
-      let arrayContacts = [];
-      const contactList = await Contacts.where("ChannelId", data.channelId);
-      contactList.forEach((element) => {
-        arrayContacts.push(element.ViberAccount);
-      });
+      const Channel = await Channels.findOne({ _id: data.channelId });
+      const contacts = await Contacts.where("ChannelType", Channel.ChannelType);
+      let listContact = null;
+      if (Channel.ChannelType == "Zalo") {
+        listContact = contacts.map((element) => {
+          return element.ZaloAccount;
+        });
+      }
+      if (Channel.ChannelType == "Viber") {
+        listContact = contacts.map((element) => {
+          return element.ZaloAccount;
+        });
+      }
       const segment = new Segments({
         SegmentName: data.segmentName,
         SegmentDesc: data.segmentDesc,
-        ChannelId: data.channelId,
-        ChatIdList: arrayContacts,
+        ChannelId: Channel._id,
+        ChannelType: Channel.ChannelType,
+        ChannelToken: Channel.ChannelToken,
+        ChatIdList: listContact,
         CreateBy: id,
       });
       const saveSegment = await segment.save();
@@ -29,24 +40,39 @@ exports.createSegment = async function (data, id) {
       return result;
     }
   } catch (error) {
-    return __exception();
+    let result = __exception();
+    result.error = error;
+    return result;
   }
 };
 
 exports.updateSegment = async function (data) {
   try {
-    const contactList = await Contacts.where("ChannelId", data.channelId);
-    const arrayContacts = contactList.map((contact) => {
-      return contact.ViberAccount;
-    });
+    const segmentType = await Segments.findOne({ _id: data.id });
+    const Channel = await Channels.findOne({ _id: segmentType.ChannelId });
+    const contacts = await Contacts.where("ChannelType", Channel.ChannelType);
+    let listContact = null;
+    if (Channel.ChannelType == "Zalo") {
+      listContact = contacts.map((element) => {
+        return element.ZaloAccount;
+      });
+    }
+    if (Channel.ChannelType == "Viber") {
+      listContact = contacts.map((element) => {
+        return element.ZaloAccount;
+      });
+    }
+
     let segment = new Object();
     segment.SegmentName = data.segmentName;
     segment.SegmentDesc = data.segmentDesc;
-    segment.ChatIdList = arrayContacts;
+    segment.ChatIdList = listContact;
     await Segments.updateOne({ _id: data.id }, { $set: segment });
     return __success();
   } catch (error) {
-    return __exception();
+    let result = __exception();
+    result.error = error;
+    return result;
   }
 };
 
