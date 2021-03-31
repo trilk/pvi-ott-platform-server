@@ -1,4 +1,7 @@
 const router = require("express").Router();
+require("dotenv").config();
+
+const func = require("../index");
 
 const { zaloSubscribe, zaloUnSubscribe } = require("../components/DAO/ContactDAO");
 const { getTokenByChannel } = require("../components/DAO/ChannelDAO");
@@ -12,6 +15,9 @@ router.post("/webhook", async (req, res) => {
   try {
     const event_name = req.body.event_name;
     const data = req.body;
+    if (event_name == "user_send_text") {
+      func.socketEmit(req.body);
+    }
     if (event_name == "follow") {
       await getProfileUser(token, data.follower.id)
         .then((response) => {
@@ -36,4 +42,5 @@ router.get("/webhook", async (req, res) => {
     console.log("zalo webhook connect error", error);
   }
 });
+
 module.exports = router;

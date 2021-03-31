@@ -8,6 +8,7 @@ const getProfileUser = async (token, user_id) => {
 const zaloApiPost = async (url, data) => {
   return axios.post(url, data);
 };
+
 module.exports = {
   getProfileUser,
   zaloApiPost,
