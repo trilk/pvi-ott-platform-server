@@ -18,7 +18,9 @@ const contactSchema = new mongoose.Schema({
   },
   ChannelId: {
     type: String,
-    required: true,
+  },
+  ChannelType: {
+    type: String,
   },
   ChatId: {
     type: String,

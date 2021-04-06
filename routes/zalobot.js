@@ -11,23 +11,22 @@ const { getProfileUser } = require("../services/zaloApi");
 
 router.post("/webhook", async (req, res) => {
   //get Token
-  const token = await getTokenByChannel("Zalo");
+  const token = await getTokenByChannel(req.body.oa_id);
   try {
     const event_name = req.body.event_name;
     const data = req.body;
-    if (event_name == "user_send_text") {
-      func.socketEmit(req.body);
-    }
     if (event_name == "follow") {
       await getProfileUser(token, data.follower.id)
         .then((response) => {
-          zaloSubscribe(response.data.data);
+          func.socketEmit(response.data.data);
+          zaloSubscribe(response.data.data, req.body.oa_id);
         })
         .catch((error) => {
-          console.log("error zalo follow", error);
+          console.log("error zalo get profile", error);
         });
     }
     if (event_name == "unfollow") {
+      func.socketEmit(data.follower.id);
       await zaloUnSubscribe(data.follower.id);
     }
     res.status(200).send("zalo webhook bot connect success");

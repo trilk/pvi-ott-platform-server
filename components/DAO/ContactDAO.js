@@ -2,6 +2,7 @@ const Contacts = require("../../model/Contacts.js");
 const _ = require("lodash");
 
 const { __exception, __success, __validField, __emptyData, __exist } = require("../../define_response");
+const Channels = require("../../model/Channels.js");
 exports.viberSubscribe = async function (data) {
   try {
     const checkExist = await Contacts.findOne({ ChatId: data.id });
@@ -64,18 +65,20 @@ exports.listSubcriber = async function (page, limit) {
   }
 };
 
-exports.zaloSubscribe = async function (data) {
+exports.zaloSubscribe = async function (data, oa_id) {
   try {
     const checkExist = await Contacts.findOne({ ChatId: data.user_id });
+    const channel = await Channels.findOne({ ChannelCode: oa_id });
     if (!_.isEmpty(checkExist) || !_.isNil(checkExist)) {
       await Contacts.updateOne(
         { ChatId: data.user_id },
-        { $set: { ChatStatus: true, ChatName: data.display_name, ZaloAccount: data } }
+        { $set: { ChatStatus: true, ChatName: data.display_name, ZaloAccount: data, ChannelId: channel._id } }
       );
       return __exist();
     } else {
       const contact = new Contacts({
         ChannelType: "Zalo",
+        ChannelId: channel._id,
         ChatId: data.user_id,
         ChatName: data.display_name,
         ZaloAccount: data,

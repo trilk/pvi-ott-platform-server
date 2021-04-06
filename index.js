@@ -16,7 +16,7 @@ dotenv.config();
 
 // connect mongo db
 const mongoose = require("mongoose");
-mongoose.connect(process.env.DB_CONNECTION_DEV, { useNewUrlParser: true, useUnifiedTopology: true }, () => {
+mongoose.connect(process.env.DB_CONNECTION_PRODUCT, { useNewUrlParser: true, useUnifiedTopology: true }, () => {
   console.log("connect to db!");
 });
 

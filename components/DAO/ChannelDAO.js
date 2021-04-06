@@ -71,12 +71,12 @@ exports.listChannel = async function (page, limit) {
 };
 
 //get Token by channel
-exports.getTokenByChannel = async function (channelType) {
+exports.getTokenByChannel = async function (oa_id) {
   try {
-    if (_.isEmpty(channelType) || _.isNil(channelType)) {
+    if (_.isEmpty(oa_id) || _.isNil(oa_id)) {
       return __validField();
     } else {
-      const detail = await Channels.findOne({ ChannelType: channelType });
+      const detail = await Channels.findOne({ ChannelCode: oa_id });
       return detail.ChannelToken;
     }
   } catch (error) {
