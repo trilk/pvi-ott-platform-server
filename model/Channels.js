@@ -5,7 +5,6 @@ const { v4: uuid } = require("uuid");
 const channelSchema = new mongoose.Schema({
   ChannelId: {
     type: String,
-    default: uuid(),
   },
   ChannelType: {
     type: String,
@@ -14,19 +13,14 @@ const channelSchema = new mongoose.Schema({
   CustomerCode: {
     type: String,
   },
-  ChannelInfo: {
-    ChannelId: {
-      type: String,
-    },
-    ChannelName: {
-      type: String,
-    },
-    ChannelToken: {
-      type: String,
-    },
-    ChannelHashKey: {
-      type: String,
-    },
+  ChannelName: {
+    type: String,
+  },
+  ChannelToken: {
+    type: String,
+  },
+  ChannelHashKey: {
+    type: String,
   },
   CreateDate: {
     type: Date,

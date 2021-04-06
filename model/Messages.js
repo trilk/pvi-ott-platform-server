@@ -41,13 +41,15 @@ const messageSchema = new mongoose.Schema({
     type: Array,
     // required: true,
   },
-  ChannelType: {
+  ChannelId: {
     type: String,
     //required: true,
   },
-  CustomerCode: {
+  ChannelType: {
     type: String,
-    required: true,
+  },
+  ChannelToken: {
+    type: String,
   },
   CreateDate: {
     type: Date,

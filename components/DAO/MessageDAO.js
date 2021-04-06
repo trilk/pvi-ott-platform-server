@@ -4,7 +4,7 @@ const MessageClass = require("../constructor/Message");
 
 //lodash
 const _ = require("lodash");
-
+const { __emptyData, __validField, __exception, __success } = require("../../define_response");
 function parseMessage(data) {
   var message = new MessageClass.Message();
   message.setContentOTT(data.contentOTT);
@@ -15,23 +15,71 @@ function parseMessage(data) {
 }
 
 exports.createMessage = async function (data, id) {
-  const message = parseMessage(data);
   try {
-    if (!_.isEmpty(message.getSegmentId())) {
-      const segments = await Segments.where("SegementId", message.getSegmentId);
+    const message = parseMessage(data);
+    const segments = await Segments.findOne({ _id: message.getSegmentId() });
+    if (_.isEmpty(segments)) {
+      return __emptyData();
+    } else {
       const result = new Messages({
         ContentOTT: message.getContentOTT(),
         ContentSMS: message.getContentSMS(),
         TemplateId: message.getTemplateId(),
-        ChatIdList: segments[0].ChatIdList,
-        CustomerCode: segments[0].CustomerCode,
-        ChannelType: segments[0].ChannelType,
+        ChatIdList: segments.ChatIdList,
+        ChannelId: segments.ChannelId,
+        ChannelType: segments.ChannelType,
+        ChannelToken: segments.ChannelToken,
         CreateBy: id,
       });
-      const saveMessage = await result.save();
-      return saveMessage;
+      await result.save();
+      return __success();
     }
   } catch (error) {
-    return error;
+    return __exception();
+  }
+};
+
+exports.updateMessage = async function (data) {
+  try {
+    const message = parseMessage(data);
+    const segments = await Segments.findOne({ _id: message.getSegmentId() });
+    console.log(segments);
+    if (_.isEmpty(segments)) {
+      return __emptyData();
+    } else {
+      const result = new Object({
+        ContentOTT: message.getContentOTT(),
+        ContentSMS: message.getContentSMS(),
+        TemplateId: message.getTemplateId(),
+        ChatIdList: segments.ChatIdList,
+        ChannelId: segments.ChannelId,
+        ChannelType: segments.ChannelType,
+        ChannelToken: segments.ChannelToken,
+      });
+      await Messages.updateOne({ _id: data.id }, { $set: result });
+      return __success();
+    }
+  } catch (error) {
+    let result = __exception();
+    result.error = error;
+    return result;
+  }
+};
+
+// list all message with limit,page parameter
+exports.listMessage = async function (page, limit) {
+  try {
+    const list = await Messages.find()
+      .sort({ _id: -1 })
+      .skip(limit * page - limit)
+      .limit(limit);
+
+    const totalRecord = await Messages.find();
+    let listMessage = new Object();
+    listMessage.messages = list;
+    listMessage.total = totalRecord.length;
+    return listMessage;
+  } catch (error) {
+    return __exception();
   }
 };

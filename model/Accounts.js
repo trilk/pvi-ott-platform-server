@@ -42,6 +42,9 @@ const accountSchema = new mongoose.Schema({
   Address: {
     type: String,
   },
+  AccountType: {
+    type: String,
+  },
   CreateDate: {
     type: Date,
     default: Date.now(),

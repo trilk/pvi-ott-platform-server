@@ -1,1 +1,5 @@
-### `OTT PLATFORM SERVER NODEJS`
+### `Start Project`
+
+# nodemon index.js;
+# npm start 
+

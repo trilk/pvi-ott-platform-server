@@ -4,17 +4,8 @@ const mongoose = require("mongoose");
 const { v4: uuid } = require("uuid");
 
 const contactSchema = new mongoose.Schema({
-  ContactId: {
-    type: String,
-    default: uuid(),
-  },
   PhoneNumber: {
     type: String,
-    required: true,
-  },
-  CustomerCode: {
-    type: String,
-    required: true,
   },
   Email: {
     type: String,
@@ -25,163 +16,33 @@ const contactSchema = new mongoose.Schema({
   FullName: {
     type: String,
   },
-  ContactStatus: {
-    type: Number,
-  },
-  ZaloAccount: {
-    Id: {
-      type: String,
-    },
-    UserName: {
-      type: String,
-    },
-    ChannelId: {
-      type: String,
-    },
-    CreateDate: {
-      type: Date,
-      default: Date.now(),
-    },
-    LastestUpdate: {
-      type: Date,
-      default: Date.now(),
-    },
-  },
-  FacebookAccount: {
-    Id: {
-      type: String,
-    },
-    UserName: {
-      type: String,
-    },
-    ChannelId: {
-      type: String,
-    },
-    CreateDate: {
-      type: Date,
-      default: Date.now(),
-    },
-    LastestUpdate: {
-      type: Date,
-      default: Date.now(),
-    },
-  },
-  IntagramAccount: {
-    Id: {
-      type: String,
-    },
-    UserName: {
-      type: String,
-    },
-    ChannelId: {
-      type: String,
-    },
-    CreateDate: {
-      type: Date,
-      default: Date.now(),
-    },
-    LastestUpdate: {
-      type: Date,
-      default: Date.now(),
-    },
-  },
-  ViberAccount: {
-    Id: {
-      type: String,
-    },
-    UserName: {
-      type: String,
-    },
-    ChannelId: {
-      type: String,
-    },
-    CreateDate: {
-      type: Date,
-      default: Date.now(),
-    },
-    LastestUpdate: {
-      type: Date,
-      default: Date.now(),
-    },
-  },
-  WhatsAppAccount: {
-    Id: {
-      type: String,
-    },
-    UserName: {
-      type: String,
-    },
-    ChannelId: {
-      type: String,
-    },
-    CreateDate: {
-      type: Date,
-      default: Date.now(),
-    },
-    LastestUpdate: {
-      type: Date,
-      default: Date.now(),
-    },
-  },
-  TelegramAccount: {
-    Id: {
-      type: String,
-    },
-    UserName: {
-      type: String,
-    },
-    ChannelId: {
-      type: String,
-    },
-    CreateDate: {
-      type: Date,
-      default: Date.now(),
-    },
-    LastestUpdate: {
-      type: Date,
-      default: Date.now(),
-    },
-  },
-  Status: {
-    type: Number,
-  },
-  LastLocation: {
-    lat: {
-      type: String,
-    },
-    lng: {
-      type: String,
-    },
-  },
-  LastMessageSent: {
+  ChannelId: {
     type: String,
   },
-  LastActive: {
-    type: Date,
+  ChannelType: {
+    type: String,
   },
-  Address: {
-    Address: {
-      type: String,
-    },
-    Ward: {
-      type: String,
-    },
-    District: {
-      type: String,
-    },
-    City: {
-      type: String,
-    },
-    Country: {
-      type: String,
-    },
+  ChatId: {
+    type: String,
+  },
+  ChatName: {
+    type: String,
+  },
+  ChatStatus: {
+    type: Boolean,
+  },
+  ViberAccount: {
+    type: Object,
+  },
+  ZaloAccount: {
+    type: Object,
   },
   CreateDate: {
     type: Date,
     default: Date.now(),
   },
   LastestUpdate: {
-    type: String,
+    type: Date,
     default: Date.now(),
   },
 });

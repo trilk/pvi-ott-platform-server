@@ -14,16 +14,18 @@ const segmentSchema = new mongoose.Schema({
   SegmentDesc: {
     type: String,
   },
-  CustomerCode: {
-    type: String,
-    required: true,
-  },
   ChatIdList: {
     type: Array,
   },
-  ChannelType: {
+  ChannelId: {
     type: String,
     required: true,
+  },
+  ChannelType: {
+    type: String,
+  },
+  ChannelToken: {
+    type: String,
   },
   FilterQuery: {
     type: Array,
