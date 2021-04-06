@@ -67,6 +67,7 @@ app.get("/", (req, res) => {
 });
 
 const http = require("http");
+const port = process.env.PORT || 5000;
 
 const server = http
   .createServer(
@@ -76,8 +77,8 @@ const server = http
     },
     app
   )
-  .listen(process.env.PORT, () => {
-    console.log(`server express started ${process.env.PORT}`);
+  .listen(port, () => {
+    console.log(`server express started ${port}`);
   });
 const io = require("socket.io")(server, {
   cors: {
