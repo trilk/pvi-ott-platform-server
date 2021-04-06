@@ -1,6 +1,5 @@
 const express = require("express");
 const app = express();
-
 const fs = require("fs");
 
 const bodyParser = require("body-parser");
@@ -61,7 +60,7 @@ app.use("/api/account-type", accountTypeRoute);
 app.use("/api/message", messageRoute);
 app.use("/api/segment", segmentRoute);
 app.use("/api/channel", channelRoute);
-app.use("/api/contact", contactRoute);
+app.use("/api/contact", contactRoute);  // path must route to lambda
 
 app.get("/", (req, res) => {
   res.send("hello").status(200);
